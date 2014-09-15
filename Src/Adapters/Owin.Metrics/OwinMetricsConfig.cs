@@ -1,7 +1,8 @@
-﻿using System;
-using Metrics;
+﻿using Metrics;
 using Metrics.Core;
 using Owin.Metrics.Middleware;
+using System;
+using System.Collections.Generic;
 
 namespace Owin.Metrics
 {
@@ -10,17 +11,20 @@ namespace Owin.Metrics
         private readonly Action<object> middlewareRegistration;
         private readonly MetricsRegistry registry;
         private readonly Func<HealthStatus> healthStatus;
+        private readonly Func<IDictionary<string, object>, string> metricNameResolver;
 
-        public OwinMetricsConfig(Action<object> middlewareRegistration, MetricsRegistry registry, Func<HealthStatus> healthStatus)
+        public OwinMetricsConfig(Action<object> middlewareRegistration, MetricsRegistry registry, Func<HealthStatus> healthStatus,
+            Func<IDictionary<string, object>, string> metricNameResolver)
         {
             this.middlewareRegistration = middlewareRegistration;
             this.registry = registry;
             this.healthStatus = healthStatus;
+            this.metricNameResolver = metricNameResolver;
         }
 
         public OwinMetricsConfig WithRequestMetricsConfig(Action<OwinRequestMetricsConfig> config)
         {
-            OwinRequestMetricsConfig requestConfig = new OwinRequestMetricsConfig(this.middlewareRegistration, this.registry);
+            OwinRequestMetricsConfig requestConfig = new OwinRequestMetricsConfig(this.middlewareRegistration, this.registry, this.metricNameResolver);
             config(requestConfig);
             return this;
         }

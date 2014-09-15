@@ -1,18 +1,21 @@
-﻿using System;
-using Metrics.Core;
+﻿using Metrics.Core;
 using Owin.Metrics.Middleware;
+using System;
+using System.Collections.Generic;
 
 namespace Owin.Metrics
 {
     public class OwinRequestMetricsConfig
     {
         private readonly MetricsRegistry metricsRegistry;
+        private readonly Func<IDictionary<string, object>, string> metricNameResolver;
         private readonly Action<object> middlewareRegistration;
 
-        public OwinRequestMetricsConfig( Action<object> middlewareRegistration, MetricsRegistry metricsRegistry)
+        public OwinRequestMetricsConfig(Action<object> middlewareRegistration, MetricsRegistry metricsRegistry, Func<IDictionary<string, object>, string> metricNameResolver)
         {
             this.middlewareRegistration = middlewareRegistration;
             this.metricsRegistry = metricsRegistry;
+            this.metricNameResolver = metricNameResolver;
             this.MetricsPrefix = "Owin";
         }
 
@@ -32,7 +35,7 @@ namespace Owin.Metrics
             RegisterRequestTimer();
             RegisterActiveRequestCounter();
             RegisterPostAndPutRequestSizeHistogram();
-            RegisterTimerForEachRequest();
+            RegisterTimerForEachRequest(metricNameResolver);
             RegisterErrorsMeter();
             return this;
         }
@@ -76,9 +79,9 @@ namespace Owin.Metrics
         /// Timer is created based on route and will be named:
         /// Owin.{HTTP_METHOD_NAME} [{ROUTE_PATH}]
         /// </summary>
-        public OwinRequestMetricsConfig RegisterTimerForEachRequest(string metricPrefix = "Owin")
+        public OwinRequestMetricsConfig RegisterTimerForEachRequest(Func<IDictionary<string, object>, string> metricNameResolver, string metricPrefix = "Owin")
         {
-            var metricsMiddleware = new TimerForEachRequestMiddleware(metricsRegistry, metricPrefix);
+            var metricsMiddleware = new TimerForEachRequestMiddleware(metricsRegistry, metricPrefix, metricNameResolver);
             middlewareRegistration(metricsMiddleware);
             return this;
         }
