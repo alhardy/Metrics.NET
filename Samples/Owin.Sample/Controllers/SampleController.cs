@@ -6,8 +6,8 @@ namespace Owin.Sample.Controllers
     [RoutePrefix("sample")]
     public class SampleController : ApiController
     {
-        [Route("")]
-        public IEnumerable<string> Get()
+        [Route("test/{x}/{i}")]
+        public IEnumerable<string> Get(string x, int i)
         {
             return new[] { "value1", "value2" };
         }

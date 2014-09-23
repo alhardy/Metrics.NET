@@ -1,12 +1,13 @@
 ﻿using Metrics;
+using Microsoft.Owin;
 using Microsoft.Owin.Cors;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Owin.Metrics;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 
@@ -26,6 +27,11 @@ namespace Owin.Sample
 
             app.UseCors(CorsOptions.AllowAll);
 
+            var httpConfig = new HttpConfiguration();
+            httpConfig.MapHttpAttributeRoutes();
+            apiExplorer = httpConfig.Services.GetApiExplorer();
+            httpConfig.EnsureInitialized();
+
             Metric.Config
                 .WithAllCounters()
                 .WithReporting(r => r.WithConsoleReport(TimeSpan.FromSeconds(30)))
@@ -34,19 +40,36 @@ namespace Owin.Sample
                     .WithMetricsEndpoint()
                 , MetricNameResolver);
 
-            var httpConfig = new HttpConfiguration();
-            httpConfig.MapHttpAttributeRoutes();
 
-            apiExplorer = httpConfig.Services.GetApiExplorer();
 
             app.UseWebApi(httpConfig);
+
+
         }
 
         public string MetricNameResolver(IDictionary<string, object> environment)
         {
-            var getActions = apiExplorer.ApiDescriptions.Where(x => x.HttpMethod == HttpMethod.Get).FirstOrDefault();
+            var request = new OwinRequest(environment);
 
-            return environment["owin.RequestPath"].ToString().ToUpper();
+            var description = apiExplorer.ApiDescriptions
+                .FirstOrDefault(x =>
+                {
+                    var path = request.Uri.AbsolutePath.ToString(CultureInfo.InvariantCulture).TrimStart(new[] { '/' });
+                    var routeTemplateSectionCount = x.Route.RouteTemplate.Split(new[] { '/' }).Count();
+                    var pathSections = path.Split(new[] { '/' });
+                    var pathSectionCount = pathSections.Count();
+                    var actualPathWithoutRouteParams = pathSections
+                        .Take(pathSectionCount - x.ParameterDescriptions.Count)
+                        .Aggregate(string.Empty, (current, section) => current + ("/" + section)).TrimStart(new[] { '/' });
+
+                    return x.HttpMethod.Method == request.Method
+                        && x.Route.RouteTemplate.StartsWith(actualPathWithoutRouteParams)
+                        && routeTemplateSectionCount == pathSectionCount;
+                });
+
+            if (description == null) return request.Method + " Unknown";
+
+            return request.Method + " " + description.Route.RouteTemplate;
         }
     }
 }

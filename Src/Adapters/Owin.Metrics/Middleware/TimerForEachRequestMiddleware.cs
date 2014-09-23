@@ -39,11 +39,11 @@ namespace Owin.Metrics.Middleware
 
             var httpResponseStatusCode = int.Parse(environment["owin.ResponseStatusCode"].ToString());
             var httpMethod = environment["owin.RequestMethod"].ToString().ToUpper();
+            var metricName = this.metricNameResolver(environment);
 
-            if (httpResponseStatusCode != (int)HttpStatusCode.NotFound)
+            if (httpResponseStatusCode != (int)HttpStatusCode.NotFound && !string.IsNullOrWhiteSpace(metricName))
             {
-                var httpRequestPath = this.metricNameResolver(environment);
-                var name = string.Format("{0}.{1} [{2}]", metricPrefix, httpMethod, httpRequestPath);
+                var name = string.Format("{0}.{1} [{2}]", metricPrefix, httpMethod, metricName);
                 var startTime = (long)environment[RequestStartTimeKey];
                 var elapsed = Clock.Default.Nanoseconds - startTime;
                 this.registry.Timer(name, Unit.Requests, SamplingType.FavourRecent, TimeUnit.Seconds, TimeUnit.Milliseconds).Record(elapsed, TimeUnit.Nanoseconds);
