@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using Metrics.Json;
+﻿using Metrics.Json;
 using Metrics.MetricData;
 using Metrics.Reporters;
 using Metrics.Utils;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 
 namespace Metrics.ElasticSearch
 {
@@ -47,7 +47,10 @@ namespace Metrics.ElasticSearch
             using (var client = new WebClient())
             {
                 var json = string.Join(Environment.NewLine, this.data.Select(d => d.ToJsonString()));
-                client.UploadString(this.elasticSearchUri, json);
+                if (!string.IsNullOrWhiteSpace(json))
+                {
+                    client.UploadString(this.elasticSearchUri, json);
+                }
             }
         }
 
