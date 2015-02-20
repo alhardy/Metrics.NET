@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Metrics.MetricData;
+using Metrics.Sampling;
+using System;
 using System.Collections.Concurrent;
 using System.Linq;
-using Metrics.MetricData;
-using Metrics.Sampling;
 
 namespace Metrics.Core
 {
@@ -66,6 +66,12 @@ namespace Metrics.Core
             }
             var attached = this.childContexts.GetOrAdd(contextName, context);
             return object.ReferenceEquals(attached, context);
+        }
+
+        public bool IsContextRegistered(string contextName)
+        {
+            MetricsContext context;
+            return this.childContexts.TryGetValue(contextName, out context);
         }
 
         public void ShutdownContext(string contextName)

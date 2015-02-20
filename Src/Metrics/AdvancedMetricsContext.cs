@@ -1,7 +1,7 @@
-﻿using System;
-using Metrics.Core;
+﻿using Metrics.Core;
 using Metrics.MetricData;
 using Metrics.Sampling;
+using System;
 
 namespace Metrics
 {
@@ -14,6 +14,13 @@ namespace Metrics
         /// <param name="context">Existing context instance.</param>
         /// <returns>true if the context was attached, false otherwise.</returns>
         bool AttachContext(string contextName, MetricsContext context);
+
+        /// <summary>
+        /// Determines whether [is context registered] [the specified context name].
+        /// </summary>
+        /// <param name="contextName">Name of the context.</param>
+        /// <returns></returns>
+        bool IsContextRegistered(string contextName);
 
         /// <summary>
         /// All metrics operations will be NO-OP.
