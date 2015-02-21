@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Metrics.MetricData;
+using Metrics.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Metrics.MetricData;
-using Metrics.Utils;
 
 namespace Metrics.Reporters
 {

@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Metrics.MetricData;
+using Metrics.Reporters;
+using Metrics.Utils;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Metrics.MetricData;
-using Metrics.Reporters;
-using Metrics.Utils;
 
 namespace Metrics.Graphite
 {

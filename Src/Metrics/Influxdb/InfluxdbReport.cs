@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Metrics.Json;
+using Metrics.Reporters;
+using Metrics.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using Metrics.Json;
-using Metrics.Reporters;
-using Metrics.Utils;
 
 namespace Metrics.Influxdb
 {

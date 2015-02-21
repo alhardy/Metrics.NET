@@ -2,10 +2,14 @@
 using Metrics.MetricData;
 using Metrics.Reporters;
 using Metrics.Utils;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace Metrics.ElasticSearch
 {
@@ -27,18 +31,34 @@ namespace Metrics.ElasticSearch
         }
 
         private List<ESDocument> data = null;
+        private string contextName;
 
         public ElasticSearchReport(Uri elasticSearchUri, string elasticSearchIndex)
         {
             this.elasticSearchUri = elasticSearchUri;
             this.elasticSearchIndex = elasticSearchIndex;
-        }
 
+            var counterMapping = LoadJson("mappings.json");
+            using (var client = new WebClient())
+            {
+                try
+                {
+                    client.UploadString(this.elasticSearchUri + this.elasticSearchIndex, "PUT", counterMapping);
+                }
+                catch (WebException) { }
+            }
+        }
 
         protected override void StartReport(string contextName)
         {
             this.data = new List<ESDocument>();
+            this.contextName = contextName;
             base.StartReport(contextName);
+        }
+
+        protected override void StartContext(string contextName)
+        {
+            this.contextName = contextName;
         }
 
         protected override void EndReport(string contextName)
@@ -49,7 +69,7 @@ namespace Metrics.ElasticSearch
                 var json = string.Join(Environment.NewLine, this.data.Select(d => d.ToJsonString()));
                 if (!string.IsNullOrWhiteSpace(json))
                 {
-                    client.UploadString(this.elasticSearchUri, json);
+                    //client.UploadString(this.elasticSearchUri, json);
                 }
             }
         }
@@ -70,6 +90,19 @@ namespace Metrics.ElasticSearch
             });
         }
 
+        private string FormatUniqueMetricId(string metricName)
+        {
+            var formattedMetricName = metricName.Replace("-", string.Empty);
+            formattedMetricName = Regex.Replace(formattedMetricName, @"\s+", "-");
+
+            return Environment.MachineName.ToLowerInvariant() + "." + formattedMetricName.ToLowerInvariant();
+        }
+
+        protected override string FormatMetricName<T>(string context, MetricValueSource<T> metric)
+        {
+            return string.Concat(context, " ", metric.Name);
+        }
+
         protected override void ReportGauge(string name, double value, Unit unit, MetricTags tags)
         {
             if (!double.IsNaN(value) && !double.IsInfinity(value))
@@ -82,15 +115,30 @@ namespace Metrics.ElasticSearch
 
         protected override void ReportCounter(string name, CounterValue value, Unit unit, MetricTags tags)
         {
-            var itemProperties = value.Items.SelectMany(i => new[] 
+            var items = new List<dynamic>();
+            if (value.Items.Any())
             {
-                new JsonProperty(i.Item + " - Count", i.Count), 
-                new JsonProperty(i.Item + " - Percent", i.Percent),
-            });
+                items = new List<dynamic>(value.Items.Select(i => new { name = i.Item, count = i.Count, percent = i.Percent }));
+            }
 
-            Pack("Counter", name, unit, tags, new[] { 
-                new JsonProperty("Count", value.Count),
-            }.Concat(itemProperties));
+            var counter = new
+            {
+                context = this.contextName,
+                server = Environment.MachineName,
+                name = name,
+                server_unique_name = FormatUniqueMetricId(name),
+                total_count = value.Count,
+                items = items,
+                unit = unit.Name,
+                tags = tags.Tags,
+                timestamp = Clock.FormatTimestamp(this.CurrentContextTimestamp)
+            };
+
+            using (var client = new WebClient())
+            {
+                var json = JsonConvert.SerializeObject(counter);
+                client.UploadString(this.elasticSearchUri + this.elasticSearchIndex + "/counter", "POST", json);
+            }
         }
 
         protected override void ReportMeter(string name, MeterValue value, Unit unit, TimeUnit rateUnit, MetricTags tags)
@@ -165,6 +213,16 @@ namespace Metrics.ElasticSearch
 
         protected override void ReportHealth(HealthStatus status)
         {
+        }
+
+        public string LoadJson(string jsonFile)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var path = string.Concat(GetType().Namespace, ".Dsl.");
+            using (var sr = new StreamReader(assembly.GetManifestResourceStream(path + jsonFile)))
+            {
+                return sr.ReadToEnd();
+            }
         }
     }
 }
