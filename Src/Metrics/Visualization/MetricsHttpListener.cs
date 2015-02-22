@@ -108,7 +108,7 @@ namespace Metrics.Visualization
                 case "/":
                     if (!context.Request.Url.ToString().EndsWith("/"))
                     {
-                        context.Response.Redirect(context.Request.Url.ToString() + "/");
+                        context.Response.Redirect(context.Request.Url + "/");
                         context.Response.Close();
                         return Task.FromResult(0);
                     }
@@ -269,11 +269,14 @@ namespace Metrics.Visualization
             response.Headers.Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         }
 
-        public void Stop()
+        private void Stop()
         {
             cts.Cancel();
-            this.httpListener.Stop();
-            this.httpListener.Prefixes.Clear();
+            if (this.httpListener.IsListening)
+            {
+                this.httpListener.Stop();
+                this.httpListener.Prefixes.Clear();
+            }
             if (processingTask != null && !processingTask.IsCompleted)
             {
                 processingTask.Wait();
