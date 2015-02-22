@@ -1,8 +1,9 @@
 ﻿
-using System;
-using System.Collections.Generic;
 using Metrics.MetricData;
 using Metrics.Reporters;
+using System;
+using System.Collections.Generic;
+
 namespace Metrics.Reports
 {
     public sealed class MetricsReports : Utils.IHideObjectMembers, IDisposable
@@ -27,6 +28,16 @@ namespace Metrics.Reports
         {
             var newReport = new ScheduledReporter(report, this.metricsDataProvider, this.healthStatus, interval);
             this.reports.Add(newReport);
+            return this;
+        }
+
+        /// <summary>
+        /// Schedule a generic reporter to be executed/>
+        /// </summary>
+        /// <param name="report">Function that returns an instance of a reporter</param>
+        public MetricsReports WithReport(ScheduledReporter report)
+        {
+            this.reports.Add(report);
             return this;
         }
 
