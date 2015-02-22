@@ -11,11 +11,5 @@ namespace Metrics
             var uri = new Uri(string.Format(@"http://{0}:{1}/_bulk", host, port));
             return reports.WithReport(new ElasticSearchReport(uri, index), interval);
         }
-
-        public static MetricsReports WithElasticSearch(this MetricsReports reports, string host, int port, Func<string> index, TimeSpan interval)
-        {
-            var uri = new Uri(string.Format(@"http://{0}:{1}/_bulk", host, port));
-            return reports.WithReport(new ElasticSearchReport(uri, index), interval);
-        }
     }
 }
