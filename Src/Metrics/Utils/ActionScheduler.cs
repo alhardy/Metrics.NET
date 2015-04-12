@@ -78,7 +78,7 @@ namespace Metrics.Utils
                     }
                     catch (TaskCanceledException) { }
                 }
-            }, token.Token);
+            }, token.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         }
 
         public void Stop()

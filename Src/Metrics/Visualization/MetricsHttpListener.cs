@@ -1,4 +1,7 @@
 ﻿
+using Metrics.Json;
+using Metrics.MetricData;
+using Metrics.Reporters;
 using System;
 using System.IO;
 using System.IO.Compression;
@@ -7,9 +10,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Metrics.Json;
-using Metrics.MetricData;
-using Metrics.Reporters;
 
 
 namespace Metrics.Visualization
@@ -124,7 +124,8 @@ namespace Metrics.Visualization
                     return WriteJsonMetricsV1(context, this.metricsDataProvider);
                 case "/v2/json":
                     return WriteJsonMetricsV2(context, this.metricsDataProvider);
-
+                case "/v2/metrics":
+                    return WriteJsonMetricsV2(context, this.metricsDataProvider);
                 case "/health":
                     return WriteHealthStatus(context, this.healthStatus);
                 case "/v1/health":
