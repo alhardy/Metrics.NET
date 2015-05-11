@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Configuration;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using Metrics.Logging;
+using Metrics.Utils;
 
 namespace Metrics
 {
@@ -187,15 +189,39 @@ namespace Metrics
             try
             {
                 var configName = ConfigurationManager.AppSettings["Metrics.GlobalContextName"];
-                var name = string.IsNullOrEmpty(configName) ? Process.GetCurrentProcess().ProcessName : configName;
+                var name = string.IsNullOrEmpty(configName) ? GetDefaultGlobalContextName() : ParseGlobalContextName(configName);
                 log.Debug(() => "Metrics: GlobalContext Name set to " + name);
                 return name;
             }
             catch (Exception x)
             {
-                log.ErrorException("Metrics: Error reading config value for Metrics.GlobalContetName", x);
+                log.ErrorException("Metrics: Error reading config value for Metrics.GlobalContextName", x);
                 throw new InvalidOperationException("Invalid Metrics Configuration: Metrics.GlobalContextName must be non empty string", x);
             }
+        }
+
+        private static string ParseGlobalContextName(string configName)
+        {
+            configName = Regex.Replace(configName, @"\$Env\.MachineName\$", CleanName(Environment.MachineName), RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
+            configName = Regex.Replace(configName, @"\$Env\.ProcessName\$", CleanName(Process.GetCurrentProcess().ProcessName), RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
+
+            const string aspMacro = @"\$Env\.AppDomainAppVirtualPath\$";
+            if (Regex.IsMatch(configName, aspMacro, RegexOptions.CultureInvariant | RegexOptions.IgnoreCase))
+            {
+                configName = Regex.Replace(configName, aspMacro, CleanName(AppEnvironment.ResolveAspSiteName()), RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
+            }
+
+            return configName;
+        }
+
+        private static string CleanName(string name)
+        {
+            return name.Replace('.', '_');
+        }
+
+        private static string GetDefaultGlobalContextName()
+        {
+            return string.Format(@"{0}.{1}", CleanName(Environment.MachineName), CleanName(Process.GetCurrentProcess().ProcessName));
         }
     }
 }

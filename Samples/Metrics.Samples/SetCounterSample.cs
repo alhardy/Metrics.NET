@@ -1,5 +1,6 @@
 ﻿
-using Metrics.Utils;
+using System;
+
 namespace Metrics.Samples
 {
     public class SetCounterSample
@@ -24,7 +25,8 @@ namespace Metrics.Samples
         {
             for (int i = 0; i < 30; i++)
             {
-                var commandIndex = ThreadLocalRandom.NextLong() % 5;
+
+                var commandIndex = new Random().Next() % 5;
                 if (commandIndex == 0) new SetCounterSample().Process(new SendEmail());
                 if (commandIndex == 1) new SetCounterSample().Process(new ShipProduct());
                 if (commandIndex == 2) new SetCounterSample().Process(new BillCustomer());

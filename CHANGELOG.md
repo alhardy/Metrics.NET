@@ -1,3 +1,28 @@
+###0.3.2-pre / 2015-04-29
+* better meter performance (on recording path meter has same performance as a counter)
+* default to using HdrHistogram port reservoir for histogram and timer metrics ( greatly reduces contention and increases performance )
+* remove context Merging as the latest changes remove most of the contention on the recording path
+
+###0.3.1-pre / 2015-04-17
+* update packages & fix nuget package dependencies versions
+
+###0.3.0-pre / 2015-04-17
+* use ConcurrentUtils StripedLongAdder for better performance with concurrent counter
+* provide macros for config value for Metrics.GlobalContextName
+* performance improvements - reduce memory allocations
+* initial support for hdrhistogram (fully synchronized version)
+* context merging functionality (will probably be removed after switching to hdr histogram)
+* pre-release for now until the hdr histogram port is complete and integrated
+
+###0.2.16 / 2015-03-19
+* retry starting httplistener on failure (better support for asp.net hosting where app pools are recycled)
+
+###0.2.15 / 2015-03-03
+* fix disposal of httplistener (@nkot)
+* Added Process CPU usage into app counters (@o-mdr)
+* resharper cleanup
+* update dependencies
+
 ###0.2.14 / 2014-12-15
 * fix possible issue when metrics are disabled and timer returns null TimerContext
 

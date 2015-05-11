@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using Metrics.ConcurrencyUtilities;
 using Metrics.Utils;
 
 namespace Metrics.Sampling
@@ -60,16 +61,15 @@ namespace Metrics.Sampling
             this.startTime = new AtomicLong(clock.Seconds);
         }
 
-        public long Count { get { return this.count.Value; } }
-        public int Size { get { return Math.Min(this.size, (int)this.count.Value); } }
+        public int Size { get { return Math.Min(this.size, (int)this.count.GetValue()); } }
 
         public Snapshot GetSnapshot(bool resetReservoir = false)
         {
-            bool lockTaken = false;
+            var lockTaken = false;
             try
             {
                 this.@lock.Enter(ref lockTaken);
-                var snapshot = new WeightedSnapshot(this.count.Value, this.values.Values);
+                var snapshot = new WeightedSnapshot(this.count.GetValue(), this.values.Values);
                 if (resetReservoir)
                 {
                     ResetReservoir();
@@ -92,7 +92,7 @@ namespace Metrics.Sampling
 
         public void Reset()
         {
-            bool lockTaken = false;
+            var lockTaken = false;
             try
             {
                 this.@lock.Enter(ref lockTaken);
@@ -111,30 +111,33 @@ namespace Metrics.Sampling
         {
             this.values.Clear();
             this.count.SetValue(0L);
-            this.startTime = new AtomicLong(this.clock.Seconds);
+            this.startTime.SetValue(this.clock.Seconds);
         }
 
         private void Update(long value, string userValue, long timestamp)
         {
-            bool lockTaken = false;
+            var lockTaken = false;
             try
             {
                 this.@lock.Enter(ref lockTaken);
 
-                double itemWeight = Math.Exp(alpha * (timestamp - startTime.Value));
+                var itemWeight = Math.Exp(this.alpha * (timestamp - this.startTime.GetValue()));
                 var sample = new WeightedSample(value, userValue, itemWeight);
 
-                double random = .0;
+                var random = 0.0;
                 // Prevent division by 0
                 while (random.Equals(.0))
                 {
                     random = ThreadLocalRandom.NextDouble();
                 }
 
-                double priority = itemWeight / random;
+                var priority = itemWeight / random;
 
-                long newCount = count.Increment();
-                if (newCount <= size)
+                var newCount = this.count.GetValue();
+                newCount++;
+                this.count.SetValue(newCount);
+
+                if (newCount <= this.size)
                 {
                     this.values[priority] = sample;
                 }
@@ -182,26 +185,26 @@ namespace Metrics.Sampling
         // */
         private void Rescale()
         {
-            bool lockTaken = false;
+            var lockTaken = false;
             try
             {
                 this.@lock.Enter(ref lockTaken);
-                long oldStartTime = startTime.Value;
+                var oldStartTime = this.startTime.GetValue();
                 this.startTime.SetValue(this.clock.Seconds);
 
-                double scalingFactor = Math.Exp(-alpha * (startTime.Value - oldStartTime));
+                var scalingFactor = Math.Exp(-this.alpha * (this.startTime.GetValue() - oldStartTime));
 
                 var keys = new List<double>(this.values.Keys);
                 foreach (var key in keys)
                 {
-                    WeightedSample sample = this.values[key];
+                    var sample = this.values[key];
                     this.values.Remove(key);
-                    double newKey = key * Math.Exp(-alpha * (startTime.Value - oldStartTime));
+                    var newKey = key * Math.Exp(-this.alpha * (this.startTime.GetValue() - oldStartTime));
                     var newSample = new WeightedSample(sample.Value, sample.UserValue, sample.Weight * scalingFactor);
                     this.values[newKey] = newSample;
                 }
                 // make sure the counter is in sync with the number of stored samples.
-                this.count.SetValue(values.Count);
+                this.count.SetValue(this.values.Count);
             }
             finally
             {

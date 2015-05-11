@@ -23,6 +23,11 @@ namespace Metrics.Tests.Json
             {
                 return this.Value;
             }
+
+            public bool Merge(MetricValueProvider<T> other)
+            {
+                return false;
+            }
         }
 
         private static MetricValueProvider<T> Provider<T>(T value)
@@ -55,7 +60,7 @@ namespace Metrics.Tests.Json
 
         public JsonSerializationTests()
         {
-            this.timerValue = new TimerValue(this.meterValue, this.histogramValue, 0, TimeUnit.Nanoseconds);
+            this.timerValue = new TimerValue(this.meterValue, this.histogramValue, 0, 1, TimeUnit.Nanoseconds);
 
             this.counter = new CounterValueSource("test1", Provider(counterValue), Unit.Errors, MetricTags.None);
             this.meter = new MeterValueSource("test2", Provider(meterValue), Unit.Calls, TimeUnit.Seconds, MetricTags.None);

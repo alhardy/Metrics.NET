@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using FluentAssertions;
 using Metrics.Sampling;
 using Xunit;
@@ -7,7 +8,7 @@ namespace Metrics.Tests.Sampling
 {
     public class UniformSnapshotTest
     {
-        private readonly UniformSnapshot snapshot = new UniformSnapshot(5, new long[] { 5, 1, 2, 3, 4 });
+        private readonly UniformSnapshot snapshot = new UniformSnapshot(5, new [] { 5L, 1, 2, 3, 4 });
 
         [Fact]
         public void UniformSnapshot_SmallQuantilesAreTheFirstValue()
@@ -96,35 +97,35 @@ namespace Metrics.Tests.Sampling
         [Fact]
         public void UniformSnapshot_CalculatesAMinOfZeroForAnEmptySnapshot()
         {
-            Snapshot snapshot = new UniformSnapshot(0, new long[] { });
+            Snapshot snapshot = new UniformSnapshot(0, Enumerable.Empty<long>());
             snapshot.Min.Should().Be(0);
         }
 
         [Fact]
         public void UniformSnapshot_CalculatesAMaxOfZeroForAnEmptySnapshot()
         {
-            Snapshot snapshot = new UniformSnapshot(0, new long[] { });
+            Snapshot snapshot = new UniformSnapshot(0, Enumerable.Empty<long>());
             snapshot.Max.Should().Be(0);
         }
 
         [Fact]
         public void UniformSnapshot_CalculatesAMeanOfZeroForAnEmptySnapshot()
         {
-            Snapshot snapshot = new UniformSnapshot(0, new long[] { });
+            Snapshot snapshot = new UniformSnapshot(0, Enumerable.Empty<long>());
             snapshot.Mean.Should().Be(0);
         }
 
         [Fact]
         public void UniformSnapshot_CalculatesAStdDevOfZeroForAnEmptySnapshot()
         {
-            Snapshot snapshot = new UniformSnapshot(0, new long[] { });
+            Snapshot snapshot = new UniformSnapshot(0, Enumerable.Empty<long>());
             snapshot.StdDev.Should().Be(0);
         }
 
         [Fact]
         public void UniformSnapshot_CalculatesAStdDevOfZeroForASingletonSnapshot()
         {
-            Snapshot snapshot = new UniformSnapshot(0, new long[] { 1 });
+            Snapshot snapshot = new UniformSnapshot(0, new[] { 1L });
             snapshot.StdDev.Should().Be(0);
         }
 

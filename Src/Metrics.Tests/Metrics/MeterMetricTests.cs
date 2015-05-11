@@ -67,7 +67,7 @@ namespace Metrics.Tests.Metrics
             value.FiveMinuteRate.Should().BeApproximately(0.1966, 0.001);
             value.FifteenMinuteRate.Should().BeApproximately(0.1988, 0.001);
         }
-
+        
         [Fact]
         public void MeterMetric_CanReset()
         {

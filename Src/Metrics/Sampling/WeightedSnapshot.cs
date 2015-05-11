@@ -1,10 +1,10 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 namespace Metrics.Sampling
 {
-    public sealed class WeightedSample
+    public struct WeightedSample
     {
         public readonly long Value;
         public readonly string UserValue;
@@ -120,7 +120,7 @@ namespace Metrics.Sampling
         public double Percentile99 { get { return GetValue(0.99d); } }
         public double Percentile999 { get { return GetValue(0.999d); } }
 
-        public IEnumerable<long> Values { get { return this.values.AsEnumerable(); } }
+        public IEnumerable<long> Values { get { return this.values; } }
 
         public double GetValue(double quantile)
         {
@@ -137,7 +137,7 @@ namespace Metrics.Sampling
             int posx = Array.BinarySearch(this.quantiles, quantile);
             if (posx < 0)
             {
-                posx = ((-posx) - 1) - 1;
+                posx = ~posx - 1;
             }
 
             if (posx < 1)

@@ -151,6 +151,5 @@ namespace Metrics.Tests.Core
             context.Timer("test", Unit.None, tags: "tag");
             context.DataProvider.CurrentMetricsData.Timers.Single().Tags.Should().Equal(new[] { "tag" });
         }
-
     }
 }

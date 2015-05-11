@@ -46,6 +46,11 @@ namespace Metrics.MetricData
         {
             return this.scalingFunction(this.valueProvider.GetValue(resetMetric));
         }
+
+        public MetricValueProvider<T> ValueProvider
+        {
+            get { return this.valueProvider; }
+        }
     }
 
     /// <summary>

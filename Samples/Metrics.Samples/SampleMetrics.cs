@@ -2,7 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using Metrics.Utils;
+using Metrics.Core;
+using Metrics.MetricData;
 
 namespace Metrics.Samples
 {
@@ -42,7 +43,11 @@ namespace Metrics.Samples
         public SampleMetrics()
         {
             // define a simple gauge that will provide the instant value of this.someValue when requested
-            Metric.Gauge("SampleMetrics.DataValue", () => this.someValue, new Unit("$"));
+            Metric.Gauge("SampleMetrics.DataValue", () => this.someValue, Unit.Custom("$"));
+
+            Metric.Gauge("Custom Ratio", () => ValueReader.GetCurrentValue(totalRequestsCounter).Count / ValueReader.GetCurrentValue(meter).FiveMinuteRate, Unit.Percent);
+
+            Metric.Advanced.Gauge("Ratio", () => new HitRatioGauge(meter, timer, m => m.OneMinuteRate), Unit.Percent);
         }
 
         public void Request(int i)
@@ -60,15 +65,15 @@ namespace Metrics.Samples
 
                 this.meter.Mark(); // signal a new request to the meter
 
-                this.histogramOfData.Update(ThreadLocalRandom.NextLong() % 5000, i.ToString()); // update the histogram with the input data
+                this.histogramOfData.Update(new Random().Next(5000), i.ToString()); // update the histogram with the input data
 
-                var item = "Item " + ThreadLocalRandom.NextLong() % 5;
+                var item = "Item " + new Random().Next(5);
                 this.setCounter.Increment(item);
 
                 this.setMeter.Mark(item);
 
                 // simulate doing some work
-                int ms = Math.Abs((int)(ThreadLocalRandom.NextLong() % 3000L));
+                int ms = Math.Abs((int)(new Random().Next(3000)));
                 Thread.Sleep(ms);
 
                 this.concurrentRequestsCounter.Decrement(); // decrement number of concurrent requests

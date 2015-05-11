@@ -226,6 +226,5 @@ namespace Metrics.Core
                 action(context);
             }
         }
-
     }
 }

@@ -34,6 +34,11 @@ namespace Metrics.Tests.Core
             {
                 get { return new CounterValue(10L, new CounterValue.SetItem[0]); }
             }
+
+            public bool Merge(MetricValueProvider<CounterValue> other)
+            {
+                return true;
+            }
         }
 
         [Fact]
@@ -63,7 +68,6 @@ namespace Metrics.Tests.Core
             {
                 this.values.Clear();
             }
-
             public IEnumerable<long> Values { get { return this.values; } }
         }
 

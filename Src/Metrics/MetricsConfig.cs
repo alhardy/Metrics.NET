@@ -1,9 +1,11 @@
 ﻿
 using System;
 using System.Configuration;
+using System.Threading;
 using Metrics.Logging;
 using Metrics.Reports;
 using Metrics.Visualization;
+using Metrics.MetricData;
 
 namespace Metrics
 {
@@ -11,7 +13,7 @@ namespace Metrics
     {
         private static readonly ILog log = LogProvider.GetCurrentClassLogger();
 
-        public static readonly bool GlobalyDisabledMetrics = ReadGlobalyDisableMetricsSetting();
+        public static readonly bool GlobalyDisabledMetrics = ReadGloballyDisableMetricsSetting();
 
         private readonly MetricsContext context;
         private readonly MetricsReports reports;
@@ -44,21 +46,46 @@ namespace Metrics
         /// GET /text => metrics in human readable text format
         /// </summary>
         /// <param name="httpUriPrefix">prefix where to start HTTP endpoint</param>
+		/// <param name="filter">Only report metrics that match the filter.</param> 
         /// <returns>Chain-able configuration object.</returns>
-        public MetricsConfig WithHttpEndpoint(string httpUriPrefix)
+		public MetricsConfig WithHttpEndpoint(string httpUriPrefix, MetricsFilter filter = null)
         {
             if (!isDisabled)
             {
-                try
+                const int MaxRetries = 3;
+                var retries = MaxRetries;
+
+                do
                 {
-                    using (this.listener) { }
-                    this.listener = new MetricsHttpListener(httpUriPrefix, this.context.DataProvider, this.healthStatus);
-                    this.listener.Start();
-                }
-                catch (Exception x)
-                {
-                    MetricsErrorHandler.Handle(x, "Unable to start HTTP Listener");
-                }
+                    try
+                    {
+                        using (this.listener)
+                        {
+                        }
+						this.listener = new MetricsHttpListener(httpUriPrefix, this.context.DataProvider.WithFilter(filter), this.healthStatus);
+                        this.listener.Start();
+                        if (retries != MaxRetries)
+                        {
+                            log.InfoFormat("HttpListener started successfully after {0} retries", MaxRetries - retries);
+                        }
+                        retries = 0;
+                    }
+                    catch (Exception x)
+                    {
+                        retries--;
+                        if (retries > 0)
+                        {
+                            log.WarnException("Unable to start HTTP Listener. Sleeping for {0} sec and retrying {1} more times", x, MaxRetries - retries, retries);
+                            Thread.Sleep(1000 * (MaxRetries - retries));
+                        }
+                        else
+                        {
+                            MetricsErrorHandler.Handle(x,
+                                string.Format("Unable to start HTTP Listener. Retried {0} times, giving up...", MaxRetries));
+                        }
+
+                    }
+                } while (retries > 0);
             }
             return this;
         }
@@ -176,7 +203,7 @@ namespace Metrics
             using (this.listener) { }
             this.listener = null;
         }
-
+			
         private void DisableAllReports()
         {
             this.reports.StopAndClearAllReports();
@@ -235,7 +262,7 @@ namespace Metrics
             }
         }
 
-        private static bool ReadGlobalyDisableMetricsSetting()
+        private static bool ReadGloballyDisableMetricsSetting()
         {
             try
             {

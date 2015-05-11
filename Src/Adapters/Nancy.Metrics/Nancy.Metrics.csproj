@@ -10,7 +10,7 @@
     <RootNamespace>Nancy.Metrics</RootNamespace>
     <AssemblyName>Nancy.Metrics</AssemblyName>
     <FileAlignment>512</FileAlignment>
-	<TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
@@ -38,14 +38,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>1591</NoWarn>
     <DocumentationFile>..\..\..\bin\Release\Nancy.Metrics.XML</DocumentationFile>
-  </PropertyGroup>  
-  <ItemGroup>
-    <Reference Include="Nancy, Version=0.23.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Nancy.0.23.2\lib\net40\Nancy.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-  </ItemGroup>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
@@ -62,6 +55,12 @@
       <Project>{95e29d40-dbec-49e2-9cc5-26b88966dade}</Project>
       <Name>Metrics</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Nancy, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Nancy.1.2.0\lib\net40\Nancy.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

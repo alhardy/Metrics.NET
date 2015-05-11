@@ -45,6 +45,7 @@ namespace Metrics.Sampling
 
                 double avg = values.Average();
                 double sum = values.Sum(d => Math.Pow(d - avg, 2));
+
                 return Math.Sqrt((sum) / (values.Length - 1));
             }
         }
@@ -56,7 +57,7 @@ namespace Metrics.Sampling
         public double Percentile99 { get { return GetValue(0.99d); } }
         public double Percentile999 { get { return GetValue(0.999d); } }
 
-        public IEnumerable<long> Values { get { return this.values.AsEnumerable(); } }
+        public IEnumerable<long> Values { get { return this.values; } }
 
         public double GetValue(double quantile)
         {
