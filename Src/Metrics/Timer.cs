@@ -93,7 +93,7 @@ namespace Metrics
     public struct TimerContext : IDisposable
     {
         private readonly long start;
-        private readonly string userValue;
+        private string userValue;
         private Timer timer;
 
         public TimerContext(Timer timer, string userValue)
@@ -101,6 +101,15 @@ namespace Metrics
             this.start = timer.StartRecording();
             this.timer = timer;
             this.userValue = userValue;
+        }
+
+        /// <summary>
+        /// Set the user value for this timer context.
+        /// </summary>
+        /// <param name="value">New user value to use for this context.</param>
+        public void TrackUserValue(string value)
+        {
+            this.userValue = value;
         }
 
         /// <summary>

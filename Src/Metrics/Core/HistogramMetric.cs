@@ -12,7 +12,7 @@ namespace Metrics.Core
         private UserValueWrapper last;
 
         public HistogramMetric()
-            : this(new HdrHistogramReservoir()) { }
+            : this(SamplingType.Default) { }
 
         public HistogramMetric(SamplingType samplingType)
             : this(SamplingTypeToReservoir(samplingType)) { }
@@ -54,13 +54,24 @@ namespace Metrics.Core
 
         private static Reservoir SamplingTypeToReservoir(SamplingType samplingType)
         {
-            switch (samplingType)
+            while (true)
             {
-                case SamplingType.FavourRecent: return new ExponentiallyDecayingReservoir();
-                case SamplingType.LongTerm: return new UniformReservoir();
-                case SamplingType.SlidingWindow: return new SlidingWindowReservoir();
+                switch (samplingType)
+                {
+                    case SamplingType.Default:
+                        samplingType = Metric.Config.DefaultSamplingType;
+                        continue;
+                    case SamplingType.HighDynamicRange:
+                        return new HdrHistogramReservoir();
+                    case SamplingType.ExponentiallyDecaying:
+                        return new ExponentiallyDecayingReservoir();
+                    case SamplingType.LongTerm:
+                        return new UniformReservoir();
+                    case SamplingType.SlidingWindow:
+                        return new SlidingWindowReservoir();
+                }
+                throw new InvalidOperationException("Sampling type not implemented " + samplingType);
             }
-            throw new InvalidOperationException("Sampling type not implemented " + samplingType);
         }
     }
 }

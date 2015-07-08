@@ -1,6 +1,7 @@
 ﻿using System;
 using FluentAssertions;
 using Metrics.Core;
+using Metrics.Sampling;
 using Metrics.Utils;
 using Xunit;
 
@@ -9,13 +10,11 @@ namespace Metrics.Tests.Metrics
     public class TimerMetricTests
     {
         private readonly TestClock clock = new TestClock();
-        private readonly TestScheduler scheduler;
         private readonly TimerMetric timer;
 
         public TimerMetricTests()
         {
-            this.scheduler = new TestScheduler(clock);
-            this.timer = new TimerMetric(SamplingType.FavourRecent, new MeterMetric(clock, scheduler), clock);
+            this.timer = new TimerMetric(new HistogramMetric(new UniformReservoir()), new MeterMetric(this.clock, new TestScheduler(this.clock)), this.clock);
         }
 
         [Fact]
@@ -116,6 +115,28 @@ namespace Metrics.Tests.Metrics
             timer.Value.ActiveSessions.Should().Be(1);
             context2.Dispose();
             timer.Value.ActiveSessions.Should().Be(0);
+        }
+
+        [Fact]
+        public void TimerMetric_UserValueCanBeSetAfterContextCreation()
+        {
+            using (var x = timer.NewContext())
+            {
+                x.TrackUserValue("test");
+            }
+
+            timer.Value.Histogram.LastUserValue.Should().Be("test");
+        }
+
+        [Fact]
+        public void TimerMetric_UserValueCanBeOverwrittenAfterContextCreation()
+        {
+            using (var x = timer.NewContext("a"))
+            {
+                x.TrackUserValue("b");
+            }
+
+            timer.Value.Histogram.LastUserValue.Should().Be("b");
         }
     }
 }
