@@ -41,7 +41,7 @@ namespace Metrics.Reporters
             ReportSection("Histograms", data.Histograms, h => ReportHistogram(FormatMetricName(contextName, h), h.Value, h.Unit, h.Tags));
             ReportSection("Timers", data.Timers, t => ReportTimer(FormatMetricName(contextName, t), t.Value, t.Unit, t.RateUnit, t.DurationUnit, t.Tags));
 
-            var stack = Enumerable.Concat(contextStack, new[] { data.Context });
+            var stack = contextStack.Concat(new[] { data.Context });
             foreach (var child in data.ChildMetrics)
             {
                 ReportContext(child, stack);
