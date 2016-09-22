@@ -140,6 +140,8 @@
     <Compile Include="Utils\TimeUnitTests.cs" />
     <Compile Include="Sampling\UniformReservoirTests.cs" />
     <Compile Include="Visualization\FlotVisualizationTests.cs" />
+    <Compile Include="Visualization\MetricsEndpointHandlerTests.cs" />
+    <Compile Include="Visualization\MetricsEndpointTests.cs" />
     <Compile Include="Visualization\MetricsHttpListenerTests.cs" />
   </ItemGroup>
   <ItemGroup>

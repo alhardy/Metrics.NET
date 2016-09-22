@@ -1,9 +1,6 @@
 ﻿
-using Metrics.Json;
-using Metrics.Logging;
-using Metrics.MetricData;
-using Metrics.Reporters;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
@@ -11,7 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-
+using Metrics.Logging;
 
 namespace Metrics.Visualization
 {
@@ -22,33 +19,25 @@ namespace Metrics.Visualization
         private const string NotFoundResponse = "<!doctype html><html><body>Resource not found</body></html>";
         private readonly HttpListener httpListener;
         private readonly CancellationTokenSource cts;
-        private readonly MetricsDataProvider metricsDataProvider;
-        private readonly Func<HealthStatus> healthStatus;
         private readonly string prefixPath;
+        private readonly MetricsEndpointHandler endpointHandler;
 
         private Task processingTask;
-
-        private static readonly Timer jsonv1Metrics = Metric.Internal.Context("HTTP").Timer("Json V1 Metrics", Unit.Requests);
-        private static readonly Histogram jsonv1Size = Metric.Internal.Context("HTTP").Histogram("JSON V1 Size", Unit.KiloBytes);
-        private static readonly Timer jsonv2Metrics = Metric.Internal.Context("HTTP").Timer("Json v2 Metrics", Unit.Requests);
-        private static readonly Histogram jsonv2Size = Metric.Internal.Context("HTTP").Histogram("JSON V2 Size", Unit.KiloBytes);
 
         private static readonly Timer timer = Metric.Internal.Context("HTTP").Timer("Request", Unit.Requests);
         private static readonly Meter errors = Metric.Internal.Context("HTTP").Meter("Request Errors", Unit.Errors);
 
-        public MetricsHttpListener(string listenerUriPrefix, MetricsDataProvider metricsDataProvider, Func<HealthStatus> healthStatus, CancellationToken token)
+        public MetricsHttpListener(string listenerUriPrefix, IEnumerable<MetricsEndpoint> endpoints, CancellationToken token)
         {
             this.cts = CancellationTokenSource.CreateLinkedTokenSource(token);
 
             this.prefixPath = ParsePrefixPath(listenerUriPrefix);
             this.httpListener = new HttpListener();
             this.httpListener.Prefixes.Add(listenerUriPrefix);
-            this.metricsDataProvider = metricsDataProvider;
-            this.healthStatus = healthStatus;
+            this.endpointHandler = new MetricsEndpointHandler(endpoints);
         }
 
-        public static Task<MetricsHttpListener> StartHttpListenerAsync(string httpUriPrefix, MetricsDataProvider dataProvider,
-            Func<HealthStatus> healthStatus, CancellationToken token, int maxRetries = 1)
+        public static Task<MetricsHttpListener> StartHttpListenerAsync(string httpUriPrefix, IEnumerable<MetricsEndpoint> endpoints, CancellationToken token, int maxRetries = 1)
         {
             return Task.Factory.StartNew(async () =>
             {
@@ -58,7 +47,7 @@ namespace Metrics.Visualization
                 {
                     try
                     {
-                        listener = new MetricsHttpListener(httpUriPrefix, dataProvider, healthStatus, token);
+                        listener = new MetricsHttpListener(httpUriPrefix, endpoints, token);
                         listener.Start();
                         if (remainingRetries != maxRetries)
                         {
@@ -154,6 +143,21 @@ namespace Metrics.Visualization
             var urlPath = context.Request.RawUrl.Substring(this.prefixPath.Length)
                 .ToLowerInvariant();
 
+            if (TryProcessFixedEndpoints(context, urlPath))
+            {
+                return;
+            }
+
+            if (TryProcessDynamicEndpoints(context, urlPath))
+            {
+                return;
+            }
+
+            WriteNotFound(context);
+        }
+
+        private static bool TryProcessFixedEndpoints(HttpListenerContext context, string urlPath)
+        {
             switch (urlPath)
             {
                 case "/":
@@ -169,42 +173,31 @@ namespace Metrics.Visualization
                 case "/favicon.ico":
                     WriteFavIcon(context);
                     break;
-                case "/json":
-                    WriteJsonMetrics(context, this.metricsDataProvider);
-                    break;
-                case "/v1/json":
-                    WriteJsonMetricsV1(context, this.metricsDataProvider);
-                    break;
-                case "/v2/json":
-                    WriteJsonMetricsV2(context, this.metricsDataProvider);
-                    break;
-                case "/health":
-                    WriteHealthStatus(context, this.healthStatus);
-                    break;
-                case "/v1/health":
-                    WriteHealthStatus(context, this.healthStatus);
-                    break;
-                case "/text":
-                    WriteTextMetrics(context, this.metricsDataProvider, this.healthStatus);
-                    break;
                 case "/ping":
                     WritePong(context);
                     break;
                 default:
-                    WriteNotFound(context);
-                    break;
+                    return false;
             }
+
+            return true;
         }
 
-        private static void WriteHealthStatus(HttpListenerContext context, Func<HealthStatus> healthStatus)
+        private bool TryProcessDynamicEndpoints(HttpListenerContext context, string urlPath)
         {
-            var status = healthStatus();
-            var json = JsonHealthChecks.BuildJson(status);
+            var response = this.endpointHandler.Process(urlPath, context);
+            if (response != null)
+            {
+                WriteEndpointResponse(response, context);
+                return true;
+            }
 
-            var httpStatus = status.IsHealthy ? 200 : 500;
-            var httpStatusDescription = status.IsHealthy ? "OK" : "Internal Server Error";
+            return false;
+        }
 
-            WriteString(context, json, JsonHealthChecks.HealthChecksMimeType, httpStatus, httpStatusDescription);
+        private static void WriteEndpointResponse(MetricsEndpointResponse response, HttpListenerContext context)
+        {
+            WriteString(context, response.Content, response.ContentType, response.StatusCode, response.StatusCodeDescription, response.Encoding);
         }
 
         private static void WritePong(HttpListenerContext context)
@@ -217,48 +210,8 @@ namespace Metrics.Visualization
             WriteString(context, NotFoundResponse, "text/plain", 404, "NOT FOUND");
         }
 
-        private static void WriteTextMetrics(HttpListenerContext context, MetricsDataProvider metricsDataProvider, Func<HealthStatus> healthStatus)
-        {
-            var text = StringReport.RenderMetrics(metricsDataProvider.CurrentMetricsData, healthStatus);
-            WriteString(context, text, "text/plain");
-        }
-
-        private static void WriteJsonMetrics(HttpListenerContext context, MetricsDataProvider metricsDataProvider)
-        {
-            var acceptHeader = context.Request.Headers["Accept"] ?? string.Empty;
-
-            if (acceptHeader.Contains(JsonBuilderV2.MetricsMimeType))
-            {
-                WriteJsonMetricsV2(context, metricsDataProvider);
-            }
-            else
-            {
-                WriteJsonMetricsV1(context, metricsDataProvider);
-            }
-        }
-
-        private static void WriteJsonMetricsV1(HttpListenerContext context, MetricsDataProvider metricsDataProvider)
-        {
-            using (jsonv1Metrics.NewContext())
-            {
-                var json = JsonBuilderV1.BuildJson(metricsDataProvider.CurrentMetricsData);
-                jsonv1Size.Update(json.Length / 1024);
-                WriteString(context, json, JsonBuilderV1.MetricsMimeType);
-            }
-        }
-
-        private static void WriteJsonMetricsV2(HttpListenerContext context, MetricsDataProvider metricsDataProvider)
-        {
-            using (jsonv2Metrics.NewContext())
-            {
-                var json = JsonBuilderV2.BuildJson(metricsDataProvider.CurrentMetricsData);
-                jsonv2Size.Update(json.Length / 1024);
-                WriteString(context, json, JsonBuilderV2.MetricsMimeType);
-            }
-        }
-
         private static void WriteString(HttpListenerContext context, string data, string contentType,
-            int httpStatus = 200, string httpStatusDescription = "OK")
+            int httpStatus = 200, string httpStatusDescription = "OK", Encoding encoding = null)
         {
             AddCorsHeaders(context.Response);
             AddNoCacheHeaders(context.Response);
@@ -267,10 +220,12 @@ namespace Metrics.Visualization
             context.Response.StatusCode = httpStatus;
             context.Response.StatusDescription = httpStatusDescription;
 
+            var textEncoding = encoding ?? Encoding.UTF8;
+
             var acceptsGzip = AcceptsGzip(context.Request);
             if (!acceptsGzip)
             {
-                using (var writer = new StreamWriter(context.Response.OutputStream, Encoding.UTF8, 4096, true))
+                using (var writer = new StreamWriter(context.Response.OutputStream, textEncoding, 4096, true))
                 {
                     writer.Write(data);
                 }
@@ -279,7 +234,7 @@ namespace Metrics.Visualization
             {
                 context.Response.AddHeader("Content-Encoding", "gzip");
                 using (var gzip = new GZipStream(context.Response.OutputStream, CompressionMode.Compress, true))
-                using (var writer = new StreamWriter(gzip, Encoding.UTF8, 4096, true))
+                using (var writer = new StreamWriter(gzip, textEncoding, 4096, true))
                 {
                     writer.Write(data);
                 }

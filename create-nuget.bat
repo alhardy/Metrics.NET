@@ -18,6 +18,10 @@ copy .\bin\Release\owin.metrics.dll .\Publishing\lib\net45\
 copy .\bin\Release\owin.metrics.xml .\Publishing\lib\net45\
 copy .\bin\Release\owin.metrics.pdb .\Publishing\lib\net45\
 
+copy .\bin\Release\Metrics.NLog.dll .\Publishing\lib\net45\
+copy .\bin\Release\Metrics.NLog.xml .\Publishing\lib\net45\
+copy .\bin\Release\Metrics.NLog.pdb .\Publishing\lib\net45\
+
 .\.nuget\NuGet.exe pack .\Publishing\Metrics.Net.nuspec -OutputDirectory .\Publishing
 if %errorlevel% neq 0 exit /b %errorlevel%
 
@@ -25,4 +29,7 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 .\.nuget\NuGet.exe pack .\Publishing\Owin.Metrics.nuspec -OutputDirectory .\Publishing
+if %errorlevel% neq 0 exit /b %errorlevel%
+
+.\.nuget\NuGet.exe pack .\Publishing\Metrics.NLog.nuspec -OutputDirectory .\Publishing
 if %errorlevel% neq 0 exit /b %errorlevel%

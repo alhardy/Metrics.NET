@@ -40,6 +40,20 @@ namespace Metrics.Tests.HealthChecksTests
             new HealthCheck(name, () => { ThrowException(); HealthCheckResult.Healthy(); }).Execute().Check.IsHealthy.Should().BeFalse();
         }
 
+        private static void ThrowExceptionWithBracketsInMessage()
+        {
+            throw new InvalidOperationException("an {example message}");
+        }
+
+        [Fact]
+        public void HealthCheck_FailedAndDoesNotThrowUnhandledExceptionIfActionThrowsExceptionWithBracketsInMessage()
+        {
+            string name = "test";
+            new HealthCheck(name, () => ThrowExceptionWithBracketsInMessage()).Execute().Check.IsHealthy.Should().BeFalse();
+            new HealthCheck(name, () => { ThrowExceptionWithBracketsInMessage(); return "string"; }).Execute().Check.IsHealthy.Should().BeFalse();
+            new HealthCheck(name, () => { ThrowExceptionWithBracketsInMessage(); HealthCheckResult.Healthy(); }).Execute().Check.IsHealthy.Should().BeFalse();
+        }
+
         [Fact]
         public void HealthCheck_FailedIfResultUnhealthy()
         {

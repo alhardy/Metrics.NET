@@ -22,7 +22,7 @@ namespace Metrics.RemoteMetrics
         {
             using (CustomClient client = new CustomClient())
             {
-                client.Headers.Add("Accept-Encoding", "gizp");
+                client.Headers.Add("Accept-Encoding", "gzip");
                 var json = await client.DownloadStringTaskAsync(remoteUri).ConfigureAwait(false);
                 return deserializer(json);
             }

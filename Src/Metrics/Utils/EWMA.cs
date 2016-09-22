@@ -1,7 +1,7 @@
 ﻿
-using Metrics.ConcurrencyUtilities;
 using System;
 using System.Diagnostics;
+using Metrics.ConcurrencyUtilities;
 
 namespace Metrics.Utils
 {
@@ -82,60 +82,6 @@ namespace Metrics.Utils
         {
             this.uncounted.Reset();
             this.rate.SetValue(0.0);
-        }
-
-        public void Merge(EWMA other)
-        {
-            if (this.initialized)
-            {
-                while (true)
-                {
-                    var workingUc = this.uncounted.GetValue();
-                    var newUncounted = workingUc + other.uncounted.GetValue();
-
-                    if (other.initialized)
-                    {
-                        var workingRate = this.rate.GetValue();
-                        // We're adding two weighted averages... they should just be added
-                        var newRate = workingRate + other.rate.GetValue();
-
-                        // FIXME:  should use CAS, but merging mihgt not be necessary. see commented code below
-                        this.uncounted.Reset();
-                        this.uncounted.Add(workingUc + newUncounted);
-                        this.rate.SetValue(newRate);
-                        break;
-                        //if (uncounted.CompareAndSet(workingUc, newUncounted))
-                        //{
-                        //    // very slight potential for a 
-                        //    // race condition if another thread gets
-                        //    // through Tick(), start to finish, in between
-                        //    // the execution of the line above and the
-                        //    // line below
-                        //    rate.Set(newRate);
-                        //    break;
-                        //}
-                    }
-                    else
-                    {
-                        // FIXME:  should use CAS, but merging mihgt not be necessary. see commented code below
-                        this.uncounted.Reset();
-                        this.uncounted.Add(workingUc + newUncounted);
-                        break;
-                        //if (uncounted.CompareAndSet(workingUc, newUncounted))
-                        //{
-                        //    break;
-                        //}
-                    }
-                }
-            }
-            else
-            {
-                this.uncounted.Add(other.uncounted.GetValue());
-                if (other.initialized)
-                {
-                    this.rate.SetValue(other.rate.GetValue());
-                }
-            }
         }
     }
 }

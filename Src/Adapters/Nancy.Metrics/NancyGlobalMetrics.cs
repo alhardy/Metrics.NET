@@ -34,7 +34,7 @@ namespace Nancy.Metrics
         /// Registers a Timer metric named "NancyFx.Requests" that records how many requests per second are handled and also
         /// keeps a histogram of the request duration.
         /// Registers a counter for the number of active requests.
-        /// Registers a histogram for the size of the POST and PUT requests.
+        /// Registers a histogram for the size of POST, PUT and PATCH requests.
         /// Registers a timer metric for each non-error request.
         /// </summary>
         public NancyGlobalMetrics WithAllMetrics()
@@ -42,7 +42,7 @@ namespace Nancy.Metrics
             return this.WithRequestTimer()
                 .WithErrorsMeter()
                 .WithActiveRequestCounter()
-                .WithPostAndPutRequestSizeHistogram()
+                .WithPostPutAndPatchRequestSizeHistogram()
                 .WithTimerForEachRequest();
         }
 
@@ -117,20 +117,20 @@ namespace Nancy.Metrics
             });
 
             return this;
-        }
+        }        
 
         /// <summary>
-        /// Register a Histogram metric named "Nancy.PostAndPutRequestsSize" on the size of the POST and PUT requests
+        /// Register a Histogram metric named "Nancy.PostPutAndPatchRequestsSize" on the size of the POST, PUT, and PATCH requests
         /// </summary>
         /// <param name="metricName">Name of the metric.</param>
-        public NancyGlobalMetrics WithPostAndPutRequestSizeHistogram(string metricName = "Post & Put Request Size")
+        public NancyGlobalMetrics WithPostPutAndPatchRequestSizeHistogram(string metricName = "Post, Put & Patch Request Size")
         {
             var histogram = this.context.Histogram(metricName, Unit.Bytes);
 
             nancyPipelines.BeforeRequest.AddItemToStartOfPipeline(ctx =>
             {
                 var method = ctx.Request.Method.ToUpper();
-                if (method == "POST" || method == "PUT")
+                if (method == "POST" || method == "PUT" || method == "PATCH")
                 {
                     histogram.Update(ctx.Request.Headers.ContentLength);
                 }

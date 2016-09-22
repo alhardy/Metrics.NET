@@ -1,6 +1,39 @@
-###0.3.4-pre / 2015-07-26
+###0.4.2-pre / 2016-09-18
+* graphite report can now be configured from app.config file (@slawwan)
+* fixed owin adapter endpoints content type header (@glennular)
+
+###0.4.1-pre / 2016-07-24
+* fixed issue with timer metric not using the uservalue when marking the interal meter (@epeshk)
+* updated liblog to the latest version (@tsibelman)
+
+###0.4.0-pre / 2016-06-20
+* support for configuring endpoint reports
+
+###0.3.7 / 2016-05-31
+* fixed AppEnvironment.Current when Assembly.GetEntryAssembly() returns null
+
+###0.3.6 / 2016-05-29
+* fixed timer total time unit info in human readable report (@Liwoj)
+* support for reporting health checks to elasticsearch (@AmirSasson)
+* AppEnvironment now contains EntryAssembly name and version
+
+###0.3.5 / 2016-04-24
+* support rolling index for elasticsearch (@AmirSasson)
+* fixed backwards compatibility with elasticsearch (@andrepnh)
+* fixed graphite report sending incorrect values for meters (@AlistairClark7)
+* fixed string formatting in HealthCheckResult (@bregger)
+
+First 0.3.x stable release, contains all changes in previous 0.3.x-pre versions.
+
+Note: The HDR sampling implementation is in beta stage, some issues might still be present. The default sampling type remains ExponentiallyDecaying for now.
+
+Note for 0.2.x users: SamplingType.FavourRecent has been renamed to SamplingType.ExponentiallyDecaying.
+
+###0.3.4-pre / 2016-03-22
 * support multiple, separate http endpoints
 * initialize http endpoints async
+* fixed compatibility with elasticsearch 2.x
+* global context name can be retrieved from runtime environment
 
 ###0.3.3-pre / 2015-06-300
 * introduce configurable Default sampling type

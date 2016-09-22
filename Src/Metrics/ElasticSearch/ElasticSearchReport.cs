@@ -1,18 +1,27 @@
-﻿using Metrics.Json;
-using Metrics.MetricData;
-using Metrics.Reporters;
-using Metrics.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using Metrics.Json;
+using Metrics.MetricData;
+using Metrics.Reporters;
+using Metrics.Utils;
+using System.Threading.Tasks;
+using Metrics.Logging;
+using System.Runtime.Serialization.Json;
+using System.IO;
+using System.Text;
 
 namespace Metrics.ElasticSearch
 {
     public class ElasticSearchReport : BaseReport
     {
+        private static readonly ILog log = LogProvider.GetCurrentClassLogger();
+
         private readonly Uri elasticSearchUri;
-        private readonly string elasticSearchIndex;
+        private readonly bool replaceDotsOnFieldNames;
+        static readonly string __hostName = System.Net.Dns.GetHostName();
+        private readonly ElasticReportsConfig _reportConfig;
 
         private class ESDocument
         {
@@ -21,19 +30,56 @@ namespace Metrics.ElasticSearch
             public JsonObject Object { get; set; }
             public string ToJsonString()
             {
-                var meta = $"{{ \"index\" : {{ \"_index\" : \"{this.Index}\", \"_type\" : \"{this.Type}\"}} }}";
+                var meta = $"{{ \"index\" : {{ \"_index\" : \"{Index}\", \"_type\" : \"{Type}\"}} }}";
                 return meta + Environment.NewLine + this.Object.AsJson(false) + Environment.NewLine;
             }
         }
 
-        private List<ESDocument> data;
+        private List<ESDocument> data = null;
 
-        public ElasticSearchReport(Uri elasticSearchUri, string elasticSearchIndex)
+
+        public ElasticSearchReport(ElasticReportsConfig reportConfig)
         {
-            this.elasticSearchUri = elasticSearchUri;
-            this.elasticSearchIndex = elasticSearchIndex;
+            var uri = new Uri($"http://{reportConfig.Host}:{reportConfig.Port}/_bulk");
+            var nodeInfoUri = new Uri($"http://{reportConfig.Host}:{reportConfig.Port}");
+
+            _reportConfig = reportConfig;
+            this.elasticSearchUri = uri;
+
+            using (var client = new WebClient())
+            {
+                try
+                {
+                    var json = client.DownloadString(nodeInfoUri);
+                    var deserializer = new DataContractJsonSerializer(typeof(ElasticSearchNodeInfo));
+                    using (MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(json)))
+                    {
+                        var nodeInfo = (ElasticSearchNodeInfo)deserializer.ReadObject(stream);
+                        replaceDotsOnFieldNames = nodeInfo.MajorVersionNumber >= 2;
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    log.WarnException("Unable to get ElasticSearch version. Field names with dots won't be replaced.", ex);
+                    replaceDotsOnFieldNames = false;
+                }
+            }
         }
 
+        string GetIndex()
+        {
+            switch (_reportConfig.RollingIndexType)
+            {
+                case RollingIndexType.Daily:
+                    return $"{_reportConfig.Index}-{DateTime.UtcNow.ToString("yyyy-MM-dd")}";
+                case RollingIndexType.Monthly:
+                    return $"{_reportConfig.Index}-{DateTime.UtcNow.ToString("yyyy-MM")}";
+                case RollingIndexType.None:
+                default:
+                    return _reportConfig.Index;
+            }
+        }
 
         protected override void StartReport(string contextName)
         {
@@ -55,12 +101,13 @@ namespace Metrics.ElasticSearch
         {
             this.data.Add(new ESDocument
             {
-                Index = this.elasticSearchIndex,
+                Index = GetIndex(),
                 Type = type,
                 Object = new JsonObject(new[] {
                          new JsonProperty("Timestamp", Clock.FormatTimestamp(this.CurrentContextTimestamp)),
                          new JsonProperty("Type",type),
                          new JsonProperty("Name",name),
+                         new JsonProperty("ServerName",__hostName),
                          new JsonProperty("Unit", unit.ToString()),
                          new JsonProperty("Tags", tags.Tags)
                      }.Concat(properties))
@@ -128,7 +175,7 @@ namespace Metrics.ElasticSearch
                 new JsonProperty("Percentile 95%",value.Percentile95),
                 new JsonProperty("Percentile 98%",value.Percentile98),
                 new JsonProperty("Percentile 99%",value.Percentile99),
-                new JsonProperty("Percentile 99.9%" ,value.Percentile999),
+                new JsonProperty(AdjustDottedFieldNames("Percentile 99.9%"), value.Percentile999),
                 new JsonProperty("Sample Size", value.SampleSize)
             });
         }
@@ -155,13 +202,43 @@ namespace Metrics.ElasticSearch
                 new JsonProperty("Percentile 95%",value.Histogram.Percentile95),
                 new JsonProperty("Percentile 98%",value.Histogram.Percentile98),
                 new JsonProperty("Percentile 99%",value.Histogram.Percentile99),
-                new JsonProperty("Percentile 99.9%" ,value.Histogram.Percentile999),
+                new JsonProperty(AdjustDottedFieldNames("Percentile 99.9%"), value.Histogram.Percentile999),
                 new JsonProperty("Sample Size", value.Histogram.SampleSize)
             });
         }
 
+        private string AdjustDottedFieldNames(string fieldName)
+        {
+            return replaceDotsOnFieldNames ? fieldName.Replace(".", "_") : fieldName;
+        }
+
         protected override void ReportHealth(HealthStatus status)
         {
+            var props = new List<JsonProperty>{
+                new JsonProperty("IsHealthy", status.IsHealthy),
+                new JsonProperty("RegisteredChecksCount", status.Results.Count())
+            };
+            if (_reportConfig.ReportingApplication != null)
+            {
+                props.AddRange(new[] {
+                        new JsonProperty("AppVersion",_reportConfig.ReportingApplication.Version),
+                        new JsonProperty("UpTime",_reportConfig.ReportingApplication.UpTime.ToString())
+                        });
+            }
+
+            List<JsonObject> checks = new List<JsonObject>();
+            foreach (var healthResult in status.Results)
+            {
+                checks.Add(new JsonObject(
+                    new[] {
+                        new JsonProperty("Check",healthResult.Name),
+                        new JsonProperty("IsHealthy",healthResult.Check.IsHealthy),
+                        new JsonProperty("Message",healthResult.Check.Message) }));
+            }
+            props.Add(new JsonProperty("HealthChecks", checks));
+
+            Pack("Health", "HealthStatus", Unit.None, MetricTags.None, props);
         }
+
     }
 }

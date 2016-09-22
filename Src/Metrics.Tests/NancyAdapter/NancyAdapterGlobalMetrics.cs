@@ -36,6 +36,18 @@ namespace Metrics.Tests.NancyAdapter
                     return HttpStatusCode.OK;
                 };
 
+                Put["/put"] = _ =>
+                {
+                    clock.Advance(TimeUnit.Milliseconds, 200);
+                    return HttpStatusCode.OK;
+                };
+
+                Patch["/patch"] = _ =>
+                {
+                    clock.Advance(TimeUnit.Milliseconds, 200);
+                    return HttpStatusCode.OK;
+                };
+
                 Get["/error"] = _ => { throw new InvalidOperationException(); };
             }
         }
@@ -116,16 +128,16 @@ namespace Metrics.Tests.NancyAdapter
             requestTrigger.SetResult(0);
             Task.WaitAll(request1, request2);
             this.context.CounterValue("NancyFx", "Active Requests").Count.Should().Be(0);
-        }
+        }        
 
         [Fact]
-        public void NancyMetrics_ShoulBeAbleToRecordPostAndPutRequestSize()
+        public void NancyMetrics_ShoulBeAbleToRecordPostPutAndPatchRequestSize()
         {
-            this.context.HistogramValue("NancyFx", "Post & Put Request Size").Count.Should().Be(0);
+            this.context.HistogramValue("NancyFx", "Post, Put & Patch Request Size").Count.Should().Be(0);
 
             browser.Get("/test/action").StatusCode.Should().Be(HttpStatusCode.OK);
 
-            this.context.HistogramValue("NancyFx", "Post & Put Request Size").Count.Should().Be(0);
+            this.context.HistogramValue("NancyFx", "Post, Put & Patch Request Size").Count.Should().Be(0);
 
             browser.Post("/test/post", ctx =>
             {
@@ -133,8 +145,21 @@ namespace Metrics.Tests.NancyAdapter
                 ctx.Body("content");
             }).StatusCode.Should().Be(HttpStatusCode.OK);
 
-            this.context.HistogramValue("NancyFx", "Post & Put Request Size").Count.Should().Be(1);
-            this.context.HistogramValue("NancyFx", "Post & Put Request Size").Min.Should().Be("content".Length);
+            browser.Put("/test/put", ctx =>
+            {
+                ctx.Header("Content-Length", "content".Length.ToString());
+                ctx.Body("content");
+            }).StatusCode.Should().Be(HttpStatusCode.OK);
+
+            browser.Patch("/test/patch", ctx =>
+            {
+                ctx.Header("Content-Length", "content".Length.ToString());
+                ctx.Body("content");
+            }).StatusCode.Should().Be(HttpStatusCode.OK);
+
+            this.context.HistogramValue("NancyFx", "Post, Put & Patch Request Size").Count.Should().Be(3);
+            this.context.HistogramValue("NancyFx", "Post, Put & Patch Request Size").Min.Should().Be("content".Length);
+            this.context.HistogramValue("NancyFx", "Post, Put & Patch Request Size").Max.Should().Be("content".Length);
         }
 
         [Fact]

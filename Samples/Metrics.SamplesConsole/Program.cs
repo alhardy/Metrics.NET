@@ -1,7 +1,7 @@
 ﻿using System;
-using Metrics.MetricData;
 using Metrics.Samples;
 using Metrics.Utils;
+using Metrics.Visualization;
 
 namespace Metrics.SamplesConsole
 {
@@ -10,20 +10,13 @@ namespace Metrics.SamplesConsole
         static void Main(string[] args)
         {
             //Metric.CompletelyDisableMetrics();
-
             Metric.Config
-                .WithHttpEndpoint("http://localhost:1234/metrics/")
-                .WithHttpEndpoint("http://localhost:12345/metrics/")
+                .WithHttpEndpoint("http://localhost:1234/metrics/", config => config
+                    .WithEndpointReport("/test", (d, h, c) => new MetricsEndpointResponse("test", "text/plain")))
                 .WithAllCounters()
                 .WithInternalMetrics()
                 .WithReporting(config => config
-                    .WithConsoleReport(TimeSpan.FromSeconds(30))
-                //.WithCSVReports(@"c:\temp\reports\", TimeSpan.FromSeconds(10))
-                //.WithTextFileReport(@"C:\temp\reports\metrics.txt", TimeSpan.FromSeconds(10))
-                //.WithGraphite(new Uri("net.udp://localhost:2003"), TimeSpan.FromSeconds(1))
-                //.WithInfluxDb("192.168.1.8", 8086, "admin", "admin", "metrics", TimeSpan.FromSeconds(1))
-                //.WithElasticSearch("192.168.1.8", 9200, "metrics", TimeSpan.FromSeconds(1))
-                );
+                    .WithConsoleReport(TimeSpan.FromSeconds(30)));
 
             using (var scheduler = new ActionScheduler())
             {

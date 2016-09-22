@@ -36,7 +36,7 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DocumentationFile>..\..\bin\Release\Metrics.XML</DocumentationFile>
-    <NoWarn>1591 1570 1587</NoWarn>
+    <NoWarn>1591; 1570; 1587;</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -47,6 +47,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
@@ -93,7 +94,9 @@
     <Compile Include="Core\DefaultDataProvider.cs" />
     <Compile Include="Core\DefaultRegistryDataProvider.cs" />
     <Compile Include="Core\SimpleMeter.cs" />
+    <Compile Include="ElasticSearch\ElasticReportsConfig.cs" />
     <Compile Include="ElasticSearch\ElasticSearchConfigExtensions.cs" />
+    <Compile Include="ElasticSearch\ElasticSearchNodeInfo.cs" />
     <Compile Include="ElasticSearch\ElasticSearchReport.cs" />
     <Compile Include="Graphite\PickleGraphiteSender.cs" />
     <Compile Include="Graphite\PickleJar.cs" />
@@ -127,6 +130,8 @@
     <Compile Include="RemoteMetrics\RemoteMetricsExtensions.cs" />
     <Compile Include="RemoteMetrics\RemoteMetricsContext.cs" />
     <Compile Include="Reporters\MetricsReport.cs" />
+    <Compile Include="Reporters\MetricsEndpointReports.cs" />
+    <Compile Include="Reporters\EndpointReporterConfig.cs" />
     <Compile Include="Sampling\ExponentiallyDecayingReservoir.cs" />
     <Compile Include="Core\HealthCheck.cs" />
     <Compile Include="Core\MetricsBuilder.cs" />
@@ -193,6 +198,9 @@
     <Compile Include="Utils\Scheduler.cs" />
     <Compile Include="Utils\TimeUnitExtensions.cs" />
     <Compile Include="Visualization\FlotWebApp.cs" />
+    <Compile Include="Visualization\MetricsEndpoint.cs" />
+    <Compile Include="Visualization\MetricsEndpointHandler.cs" />
+    <Compile Include="Visualization\MetricsEndpointResponse.cs" />
     <Compile Include="Visualization\MetricsHttpListener.cs" />
   </ItemGroup>
   <ItemGroup>

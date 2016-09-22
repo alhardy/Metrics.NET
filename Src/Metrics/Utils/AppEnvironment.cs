@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
 using Metrics.Logging;
 using Metrics.MetricData;
 
@@ -27,6 +28,14 @@ namespace Metrics.Utils
                 yield return new EnvironmentEntry("HostName", SafeGetString(Dns.GetHostName));
                 yield return new EnvironmentEntry("IPAddress", SafeGetString(GetIpAddress));
                 yield return new EnvironmentEntry("LocalTime", Clock.FormatTimestamp(DateTime.Now));
+
+                var entryAssembly = Assembly.GetEntryAssembly();
+                if (entryAssembly != null)
+                {
+                    var entryAssemblyName = entryAssembly.GetName();
+                    yield return new EnvironmentEntry("EntryAssemblyName", entryAssemblyName.Name);
+                    yield return new EnvironmentEntry("EntryAssemblyVersion", entryAssemblyName.Version.ToString());
+                }
             }
         }
 

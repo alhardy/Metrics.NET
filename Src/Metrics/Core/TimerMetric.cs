@@ -44,7 +44,7 @@ namespace Metrics.Core
             if (nanos >= 0)
             {
                 this.histogram.Update(nanos, userValue);
-                this.meter.Mark();
+                this.meter.Mark(userValue);
                 this.totalRecordedTime.Add(nanos);
             }
         }
