@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BuildServerSettings">
+    <option name="LOGIN" value="" />
+    <option name="SERVER_URL" value="http://buildserver" />
+    <option name="PASSWORD" />
+    <option name="REMEMBER_ME" value="true" />
+    <option name="USE_IDEA_PROXY_SETTINGS" value="true" />
+    <option name="INSPECTIONS_BUILD_TYPE_IDS" />
+    <option name="DUPLICATES_BUILD_TYPE_IDS" />
+    <option name="COVERAGE_SETTINGS" />
+    <option name="TEST_STATUS_ENABLED" value="true" />
+    <option name="TEST_STATUS_SHOW_SUCCESSFUL" value="false" />
+    <option name="ARTIFACTS_BUILD_TYPE_IDS" />
+    <option name="PERFORM_COMMIT_IF_SUCCESSFUL" value="true" />
+    <option name="PERFORM_COMMIT_IF_NO_NEW_FAILED_TESTS" value="false" />
+    <option name="REQUEST_CONFIRMATON" value="false" />
+    <option name="PRE_TESTED_COMMIT" value="true" />
+    <option name="PROJECT_STATUS_DIALOG_SPLITTER_DIVIDER_LOCATION" value="500" />
+    <option name="CHANGES_STATUS_DIALOG_SPLITTER_DIVIDER_LOCATION" value="500" />
+    <option name="FILTER_BY_STATUS" value="false" />
+    <option name="FILTER_MARKED_AS_FIXED" value="false" />
+    <option name="SHOW_CLOSE_PROMPT" value="true" />
+    <option name="TOOL_WINDOW_SELECTED_CONTENT_INDEX" value="0" />
+    <option name="FILTER_BY_CURRENT_PROJECT" value="true" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="506754a2-860f-46aa-b9ed-ca53c052799c" name="Default" comment="" />
+    <ignored path="Metrics.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <ignored path=".idea/dataSources.local.xml" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="Metrics" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="NancyAdapterGlobalMetrics.cs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../../Src/Metrics.Tests/NancyAdapter/NancyAdapterGlobalMetrics.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="263">
+              <caret line="19" column="9" selection-start-line="19" selection-start-column="9" selection-end-line="19" selection-end-column="9" />
+              <folding>
+                <marker date="1474539640680" expanded="true" signature="6:114" ph="..." />
+                <marker date="1474539640680" expanded="true" signature="152:7023" ph="{...}" />
+                <marker date="1474539640680" expanded="true" signature="197:7021" ph="{...}" />
+                <marker date="1474539640680" expanded="true" signature="259:705" ph="{...}" />
+                <marker date="1474539640680" expanded="true" signature="433:695" ph="{...}" />
+                <marker date="1474539640680" expanded="true" signature="752:1707" ph="{...}" />
+                <marker date="1474539640680" expanded="true" signature="841:1697" ph="{...}" />
+                <marker date="1474539640680" expanded="true" signature="2198:2653" ph="{...}" />
+                <marker date="1474539640680" expanded="true" signature="2743:3552" ph="{...}" />
+                <marker date="1474539640680" expanded="true" signature="3629:4030" ph="{...}" />
+                <marker date="1474539640680" expanded="true" signature="4115:4837" ph="{...}" />
+                <marker date="1474539640680" expanded="true" signature="4942:6302" ph="{...}" />
+                <marker date="1474539640680" expanded="true" signature="6393:7015" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Clock.cs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../../MetricsCore/Utils/Clock.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="175">
+              <caret line="7" column="28" selection-start-line="7" selection-start-column="28" selection-end-line="7" selection-end-column="28" />
+              <folding>
+                <marker date="1462791796000" expanded="true" signature="7:68" ph="..." />
+                <marker date="1462791796000" expanded="true" signature="93:1613" ph="{...}" />
+                <marker date="1462791796000" expanded="true" signature="127:1266" ph="{...}" />
+                <marker date="1462791796000" expanded="true" signature="185:486" ph="{...}" />
+                <marker date="1462791796000" expanded="true" signature="536:735" ph="{...}" />
+                <marker date="1462791796000" expanded="true" signature="1142:1260" ph="{...}" />
+                <marker date="1462791796000" expanded="true" signature="1310:1611" ph="{...}" />
+                <marker date="1462791796000" expanded="true" signature="1498:1605" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DefaultMetricsContext.cs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../../MetricsCore/Core/DefaultMetricsContext.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="275">
+              <caret line="11" column="93" selection-start-line="11" selection-start-column="93" selection-end-line="11" selection-end-column="93" />
+              <folding>
+                <marker date="1462791794000" expanded="true" signature="7:41" ph="..." />
+                <marker date="1462791794000" expanded="true" signature="59:573" ph="{...}" />
+                <marker date="1462791794000" expanded="true" signature="128:571" ph="{...}" />
+                <marker date="1462791794000" expanded="true" signature="173:210" ph="{...}" />
+                <marker date="1462791794000" expanded="true" signature="384:396" ph="{...}" />
+                <marker date="1462791794000" expanded="true" signature="486:565" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MeterMetric.cs" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../../MetricsCore/Core/MeterMetric.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="425">
+              <caret line="17" column="36" selection-start-line="17" selection-start-column="31" selection-end-line="17" selection-end-column="36" />
+              <folding>
+                <marker date="1474539504414" expanded="true" signature="7:148" ph="..." />
+                <marker date="1474539504414" expanded="true" signature="171:4319" ph="{...}" />
+                <marker date="1474539504414" expanded="true" signature="256:259" ph="{...}" />
+                <marker date="1474539504414" expanded="true" signature="344:4317" ph="{...}" />
+                <marker date="1474539504414" expanded="true" signature="710:722" ph="{...}" />
+                <marker date="1474539504414" expanded="true" signature="784:999" ph="{...}" />
+                <marker date="1474539504414" expanded="true" signature="1091:1133" ph="{...}" />
+                <marker date="1474539504414" expanded="true" signature="1175:1225" ph="{...}" />
+                <marker date="1474539504414" expanded="true" signature="1264:1312" ph="{...}" />
+                <marker date="1474539504414" expanded="true" signature="1363:1810" ph="{...}" />
+                <marker date="1474539504414" expanded="true" signature="1872:2300" ph="{...}" />
+                <marker date="1474539504414" expanded="true" signature="2367:3421" ph="{...}" />
+                <marker date="1474539504414" expanded="true" signature="3454:3698" ph="{...}" />
+                <marker date="1474539504414" expanded="true" signature="3729:3979" ph="{...}" />
+                <marker date="1474539504414" expanded="true" signature="4012:4311" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="-12" />
+    <option name="y" value="-12" />
+    <option name="width" value="2584" />
+    <option name="height" value="1412" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="SolutionExplorer" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="SolutionExplorer">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Metrics (3 projects)" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Metrics (3 projects)" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Metrics" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Metrics (3 projects)" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Tests" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Metrics.Tests (with missing packages)" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Metrics (3 projects)" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Tests" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Metrics.Tests (with missing packages)" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NancyAdapter" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+        <option name="show-file-system" value="false" />
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Src/Metrics.Tests/Metrics.Tests.csproj" />
+    <property name="SearchEverywhereHistoryKey" value="clock&#9;null&#9;null" />
+  </component>
+  <component name="RunManager" selected=".NET Project.Default">
+    <configuration default="true" type="DotNetProject" factoryName=".NET Project">
+      <option name="PROJECT_PATH" value="" />
+      <option name="PROJECT_KIND" value="None" />
+      <option name="EXE_PATH" value="" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Default" type="DotNetProject" factoryName=".NET Project">
+      <option name="PROJECT_PATH" value="" />
+      <option name="PROJECT_KIND" value="None" />
+      <option name="EXE_PATH" value="" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <method />
+    </configuration>
+    <list size="1">
+      <item index="0" class="java.lang.String" itemvalue=".NET Project.Default" />
+    </list>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="506754a2-860f-46aa-b9ed-ca53c052799c" name="Default" comment="" />
+      <created>1474796120040</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1474796120040</updated>
+      <workItem from="1474796121275" duration="1204000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="1204000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-12" y="-12" width="2584" height="1412" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Errors in solution" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="UnitTesting" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="NuGet" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Change Signature" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24979855" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TeamCity" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Build" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32967034" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24979855" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/../../Src/Metrics.Tests/NancyAdapter/NancyAdapterGlobalMetrics.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="263">
+          <caret line="19" column="9" selection-start-line="19" selection-start-column="9" selection-end-line="19" selection-end-column="9" />
+          <folding>
+            <marker date="1474539640680" expanded="true" signature="6:114" ph="..." />
+            <marker date="1474539640680" expanded="true" signature="152:7023" ph="{...}" />
+            <marker date="1474539640680" expanded="true" signature="197:7021" ph="{...}" />
+            <marker date="1474539640680" expanded="true" signature="259:705" ph="{...}" />
+            <marker date="1474539640680" expanded="true" signature="433:695" ph="{...}" />
+            <marker date="1474539640680" expanded="true" signature="752:1707" ph="{...}" />
+            <marker date="1474539640680" expanded="true" signature="841:1697" ph="{...}" />
+            <marker date="1474539640680" expanded="true" signature="2198:2653" ph="{...}" />
+            <marker date="1474539640680" expanded="true" signature="2743:3552" ph="{...}" />
+            <marker date="1474539640680" expanded="true" signature="3629:4030" ph="{...}" />
+            <marker date="1474539640680" expanded="true" signature="4115:4837" ph="{...}" />
+            <marker date="1474539640680" expanded="true" signature="4942:6302" ph="{...}" />
+            <marker date="1474539640680" expanded="true" signature="6393:7015" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../MetricsCore/Utils/Clock.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="175">
+          <caret line="7" column="28" selection-start-line="7" selection-start-column="28" selection-end-line="7" selection-end-column="28" />
+          <folding>
+            <marker date="1462791796000" expanded="true" signature="7:68" ph="..." />
+            <marker date="1462791796000" expanded="true" signature="93:1613" ph="{...}" />
+            <marker date="1462791796000" expanded="true" signature="127:1266" ph="{...}" />
+            <marker date="1462791796000" expanded="true" signature="185:486" ph="{...}" />
+            <marker date="1462791796000" expanded="true" signature="536:735" ph="{...}" />
+            <marker date="1462791796000" expanded="true" signature="1142:1260" ph="{...}" />
+            <marker date="1462791796000" expanded="true" signature="1310:1611" ph="{...}" />
+            <marker date="1462791796000" expanded="true" signature="1498:1605" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../MetricsCore/Core/DefaultMetricsContext.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="11" column="93" selection-start-line="11" selection-start-column="93" selection-end-line="11" selection-end-column="93" />
+          <folding>
+            <marker date="1462791794000" expanded="true" signature="7:41" ph="..." />
+            <marker date="1462791794000" expanded="true" signature="59:573" ph="{...}" />
+            <marker date="1462791794000" expanded="true" signature="128:571" ph="{...}" />
+            <marker date="1462791794000" expanded="true" signature="173:210" ph="{...}" />
+            <marker date="1462791794000" expanded="true" signature="384:396" ph="{...}" />
+            <marker date="1462791794000" expanded="true" signature="486:565" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../MetricsCore/Core/MeterMetric.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="17" column="36" selection-start-line="17" selection-start-column="31" selection-end-line="17" selection-end-column="36" />
+          <folding>
+            <marker date="1474539504414" expanded="true" signature="7:148" ph="..." />
+            <marker date="1474539504414" expanded="true" signature="171:4319" ph="{...}" />
+            <marker date="1474539504414" expanded="true" signature="256:259" ph="{...}" />
+            <marker date="1474539504414" expanded="true" signature="344:4317" ph="{...}" />
+            <marker date="1474539504414" expanded="true" signature="710:722" ph="{...}" />
+            <marker date="1474539504414" expanded="true" signature="784:999" ph="{...}" />
+            <marker date="1474539504414" expanded="true" signature="1091:1133" ph="{...}" />
+            <marker date="1474539504414" expanded="true" signature="1175:1225" ph="{...}" />
+            <marker date="1474539504414" expanded="true" signature="1264:1312" ph="{...}" />
+            <marker date="1474539504414" expanded="true" signature="1363:1810" ph="{...}" />
+            <marker date="1474539504414" expanded="true" signature="1872:2300" ph="{...}" />
+            <marker date="1474539504414" expanded="true" signature="2367:3421" ph="{...}" />
+            <marker date="1474539504414" expanded="true" signature="3454:3698" ph="{...}" />
+            <marker date="1474539504414" expanded="true" signature="3729:3979" ph="{...}" />
+            <marker date="1474539504414" expanded="true" signature="4012:4311" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

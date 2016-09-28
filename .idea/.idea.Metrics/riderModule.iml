@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="RIDER_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$/../..">
+      <sourceFolder url="file://$MODULE_DIR$/../../Src/Metrics" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../MetricsCore" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../SharedAssemblyInfo.cs" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Publishing/metrics_32.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../.nuget/NuGet.Config" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../.nuget/NuGet.exe" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../.nuget/NuGet.targets" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../.nuget/packages.config" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../.travis.yml" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../build.bat" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../build.sh" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../CHANGELOG.md" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../create-nuget.bat" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Publishing/Metrics.NET.nuspec" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Publishing/Metrics.NLog.nuspec" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Publishing/Nancy.Metrics.nuspec" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Publishing/Owin.Metrics.nuspec" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Publishing/push-nuget.bat" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../README.md" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Src/Metrics.Tests" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Src/Metrics.Tests/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Src/Metrics/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../packages" />
+    </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
