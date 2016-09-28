@@ -108,10 +108,6 @@
       <Project>{95e29d40-dbec-49e2-9cc5-26b88966dade}</Project>
       <Name>Metrics</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Metrics.Samples\Metrics.Samples.csproj">
-      <Project>{d08a63d0-f440-477c-9565-1264ae0879d0}</Project>
-      <Name>Metrics.Samples</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
